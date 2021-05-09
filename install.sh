@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install Dependencies
-sudo apt-get install -y curl git apt-transport-https
+sudo apt-get install -y curl git
 
 # Install K3S
 curl -sfL https://get.k3s.io | sh -
