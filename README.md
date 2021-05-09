@@ -3,7 +3,7 @@ This is weird collection of YAML files and Shell Scripts. Use it if you like, bu
 
 # Current Stack
 * Macbook Pro 2014 Laptop // My Test VM
-* K3OS
+* Debian Server
 * Surfshark VPN + ZeroTier
-* Kubernetes
+* K3S
 * Applications
