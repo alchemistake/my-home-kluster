@@ -3,7 +3,7 @@ set -e
 
 # Install Dependencies
 sudo apt upgrade -y
-sudo apt install -y curl git ntfs-3g hfsprogs mbpfan
+sudo apt install -y curl git ntfs-3g hfsprogs mbpfan linux-headers-generic build-essential dkms
 
 # mbpfan Config
 sudo echo "[general]
@@ -16,6 +16,12 @@ max_temp = 85
 polling_interval = 1
 " >> /etc/mbpfan.conf
 sudo service mbpfan restart
+
+# Install the Wifi Driver
+git clone https://github.com/clnhub/rtl8192eu-linux.git
+cd rtl8192eu-linux
+./install_wifi.sh
+cd ..
 
 # Install K3S
 curl -sfL https://get.k3s.io | sh -
