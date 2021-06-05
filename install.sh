@@ -2,8 +2,9 @@
 set -e
 
 # Install Dependencies
+sudo apt update -y
 sudo apt upgrade -y
-sudo apt install -y curl git ntfs-3g hfsprogs mbpfan linux-headers-generic build-essential dkms
+sudo apt install -y network-manager curl git ntfs-3g hfsprogs mbpfan linux-headers-generic build-essential dkms
 
 # mbpfan Config
 sudo echo "[general]
