@@ -9,8 +9,8 @@ sudo apt install -y network-manager curl git ntfs-3g hfsprogs mbpfan linux-heade
 # mbpfan Config
 sudo echo "[general]
 
-min_fan_speed = $(cat '/sys/devices/platform/applesmc.768/fan*_min')
-max_fan_speed = $(cat '/sys/devices/platform/applesmc.768/fan*_max')
+min_fan_speed = $(cat '/sys/devices/platform/applesmc.768/fan1_min')
+max_fan_speed = $(cat '/sys/devices/platform/applesmc.768/fan1_max')
 low_temp = 63
 high_temp = 66
 max_temp = 85
