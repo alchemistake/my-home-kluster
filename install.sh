@@ -15,7 +15,7 @@ low_temp = 63
 high_temp = 66
 max_temp = 85
 polling_interval = 1
-" >> /etc/mbpfan.conf
+" > /etc/mbpfan.conf
 sudo service mbpfan restart
 
 # Install the Wifi Driver
