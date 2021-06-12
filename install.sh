@@ -18,6 +18,10 @@ polling_interval = 1
 " > /etc/mbpfan.conf
 sudo service mbpfan restart
 
+# Disable Lid Sleep
+echo " HandleLidSwitch=ignore" >> /etc/systemd/logind.conf
+sudo service systemd-logind restart
+
 # Install the Wifi Driver
 git clone https://github.com/clnhub/rtl8192eu-linux.git
 cd rtl8192eu-linux
