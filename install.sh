@@ -1,5 +1,4 @@
 #!/bin/bash
-# TODO remove sudos redundant
 set -e
 
 if [ `whoami` != root ]; then
@@ -30,6 +29,8 @@ systemctl daemon-reload
 systemctl start mbpfan.service
 
 # SSH Config
+ufw allow ssh
+
 echo "Include /etc/ssh/ssh_config.d/*.conf
 
 Host *
@@ -37,8 +38,8 @@ PasswordAuthentication yes
 SendEnv LANG LC_*
 HashKnownHosts yes
 " > /etc/ssh/ssh_config
-systemctl enable sshd.service
-systemctl start sshd.service
+systemctl enable ssh
+systemctl start ssh
 
 # Disable Lid Sleep
 echo " HandleLidSwitch=ignore" >> /etc/systemd/logind.conf
