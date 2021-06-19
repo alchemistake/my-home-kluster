@@ -45,6 +45,16 @@ systemctl start ssh
 echo " HandleLidSwitch=ignore" >> /etc/systemd/logind.conf
 service systemd-logind restart
 
+# Disable Screen
+echo 'GRUB_DEFAULT=0
+GRUB_TIMEOUT_STYLE=hidden
+GRUB_TIMEOUT=0
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="consoleblank=60"
+GRUB_CMDLINE_LINUX=""
+' > /etc/default/grub
+update-grub
+
 # Install the Wifi Driver
 git clone https://github.com/clnhub/rtl8192eu-linux.git
 cd rtl8192eu-linux
