@@ -6,10 +6,21 @@ if [ `whoami` != root ]; then
     exit
 fi
 
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+NETWORK_ID=$1
+
 # Install Dependencies
 apt update -y
 apt upgrade -y
 apt install -y network-manager curl git ntfs-3g hfsprogs mbpfan linux-headers-generic build-essential dkms bcmwl-kernel-source openssh-server
+
+# ZeroTier Install
+curl -s https://install.zerotier.com | sudo bash
+zerotier-cli join $NETWORK_ID
+printf "${CYAN}Please continue after confirming the device on ZT Dashboard and Eth Bridging is enabled${NC}"
+read throw_away_variable
 
 # mbpfan Config
 echo "[general]
@@ -60,6 +71,7 @@ git clone https://github.com/clnhub/rtl8192eu-linux.git
 cd rtl8192eu-linux
 ./install_wifi.sh
 cd ..
+rm -rf rtl8192eu-linux
 
 # Install K3S
 curl -sfL https://get.k3s.io | sh -
