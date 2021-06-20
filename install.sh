@@ -10,6 +10,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 NETWORK_ID=$1
+NODE_NAME=$2
 
 # Install Dependencies
 apt update -y
@@ -21,6 +22,10 @@ curl -s https://install.zerotier.com | sudo bash
 zerotier-cli join $NETWORK_ID
 printf "${CYAN}Please continue after confirming the device on ZT Dashboard and Eth Bridging is enabled${NC}"
 read throw_away_variable
+
+# Kustomize Install
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+mv kustomize /usr/local/bin/
 
 # mbpfan Config
 echo "[general]
@@ -74,4 +79,14 @@ cd ..
 rm -rf rtl8192eu-linux
 
 # Install K3S
-curl -sfL https://get.k3s.io | sh -
+curl -sfL https://get.k3s.io | sh - --disable servicelb --node-name $NODE_NAME
+
+# Own the cluster
+mkdir $HOME/.kube
+chown $USER /etc/rancher/k3s/k3s.yaml
+chown $USER $HOME/.kube
+cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
+chown $USER $HOME/.kube/config
+
+# Initial Install of Kustomize
+kustomize build kustomize | kubectl create -f -
