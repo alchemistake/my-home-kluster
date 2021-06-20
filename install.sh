@@ -79,7 +79,7 @@ cd ..
 rm -rf rtl8192eu-linux
 
 # Install K3S
-curl -sfL https://get.k3s.io | sh - --disable servicelb --node-name $NODE_NAME
+curl -sfL https://get.k3s.io | sh -s - --disable servicelb --node-name $NODE_NAME
 
 # Own the cluster
 mkdir $HOME/.kube
@@ -89,4 +89,4 @@ cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
 chown $USER $HOME/.kube/config
 
 # Initial Install of Kustomize
-kustomize build kustomize | kubectl create -f -
+kustomize build apps | kubectl create -f -
