@@ -6,10 +6,26 @@ if [ `whoami` != root ]; then
     exit
 fi
 
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+NETWORK_ID=$1
+NODE_NAME=$2
+
 # Install Dependencies
 apt update -y
 apt upgrade -y
 apt install -y network-manager curl git ntfs-3g hfsprogs mbpfan linux-headers-generic build-essential dkms bcmwl-kernel-source openssh-server
+
+# ZeroTier Install
+curl -s https://install.zerotier.com | sudo bash
+zerotier-cli join $NETWORK_ID
+printf "${CYAN}Please continue after confirming the device on ZT Dashboard and Eth Bridging is enabled${NC}"
+read throw_away_variable
+
+# Kustomize Install
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+mv kustomize /usr/local/bin/
 
 # mbpfan Config
 echo "[general]
@@ -60,6 +76,17 @@ git clone https://github.com/clnhub/rtl8192eu-linux.git
 cd rtl8192eu-linux
 ./install_wifi.sh
 cd ..
+rm -rf rtl8192eu-linux
 
 # Install K3S
-curl -sfL https://get.k3s.io | sh -
+curl -sfL https://get.k3s.io | sh -s - --disable servicelb --node-name $NODE_NAME
+
+# Own the cluster
+mkdir -p /home/$SUDO_USER/.kube
+chown $SUDO_USER /etc/rancher/k3s/k3s.yaml
+chown $SUDO_USER /home/$SUDO_USER/.kube
+cp /etc/rancher/k3s/k3s.yaml /home/$SUDO_USER/.kube/config
+chown $SUDO_USER /home/$SUDO_USER/.kube/config
+
+# Initial Install of Kustomize
+kustomize build apps | kubectl apply -f -
