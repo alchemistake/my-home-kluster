@@ -86,7 +86,7 @@ mkdir -p /home/$SUDO_USER/.kube
 chown $SUDO_USER /etc/rancher/k3s/k3s.yaml
 chown $SUDO_USER /home/$SUDO_USER/.kube
 cp /etc/rancher/k3s/k3s.yaml /home/$SUDO_USER/.kube/config
-chown $USER /home/$SUDO_USER/.kube/config
+chown $SUDO_USER /home/$SUDO_USER/.kube/config
 
 # Initial Install of Kustomize
 kustomize build apps | kubectl apply -f -
