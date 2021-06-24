@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex
+  namespace: plex
+  labels:
+    app: kube-plex
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: kube-plex
+  template:
+    metadata:
+      labels:
+        app: kube-plex
+    spec:
+      serviceAccountName: plex
+      hostname: "plex"
+      initContainers:
+        - name: kube-plex-install
+          image: "quay.io/munnerz/kube-plex:latest"
+          imagePullPolicy: Always
+          command:
+            - cp
+            - /kube-plex
+            - /shared/kube-plex
+          volumeMounts:
+            - name: shared
+              mountPath: /shared
+      containers:
+        - name: plex
+          image: "plexinc/pms-docker:1.16.0.1226-7eb2c8f6f"
+          imagePullPolicy: IfNotPresent
+          # We replace the PMS binary with a postStart hook to save having to
+          # modify the default image entrypoint.
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - bash
+                  - -c
+                  - |
+                    #!/bin/bash
+                    set -e
+                    rm -f '/usr/lib/plexmediaserver/Plex Transcoder'
+                    cp /shared/kube-plex '/usr/lib/plexmediaserver/Plex Transcoder'
+          readinessProbe:
+            httpGet:
+              path: /identity
+              port: 32400
+            initialDelaySeconds: 15
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /identity
+              port: 32400
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+          ports:
+            - name: pms
+              containerPort: 32400
+            - name: http
+              containerPort: 32400
+            - name: https
+              containerPort: 32443
+          env:
+            - name: TZ
+              value: "Europe/London"
+            # TODO: move this to a secret?
+            - name: PLEX_CLAIM
+              valueFrom:
+                secretKeyRef:
+                  name: claim
+                  key: claim
+              #value: claim-WHwp3Ki2NxHswKkUPVDA
+            # kube-plex env vars
+            - name: PMS_INTERNAL_ADDRESS
+              value: http://plex:32400
+            - name: PMS_IMAGE
+              value: "plexinc/pms-docker:1.16.0.1226-7eb2c8f6f"
+            - name: KUBE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: TRANSCODE_PVC
+              value: "plex-transcode"
+            - name: DATA_PVC
+              value: "plex-data"
+            - name: CONFIG_PVC
+              value: "plex-config"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /config
+            - name: transcode
+              mountPath: /transcode
+            - name: shared
+              mountPath: /shared
+          resources: {}
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      volumes:
+        - name: data
+          hostPath:
+            path: /k3s/plex/data
+        - name: config
+          hostPath:
+            path: /k3s/plex/config
+        - name: transcode
+          emptyDir: {}
+        - name: shared
+          emptyDir: {}
