@@ -70,6 +70,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="consoleblank=60"
 GRUB_CMDLINE_LINUX=""
 ' > /etc/default/grub
 update-grub
+setterm -powerdown 1
 
 # Install the Wifi Driver
 git clone https://github.com/clnhub/rtl8192eu-linux.git
