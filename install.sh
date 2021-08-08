@@ -8,7 +8,7 @@ fi
 
 if [ "$#" -ne 3 ]; then
     echo "Usage:
-    sudo ./install.sh $ZT_NETWORK_ID $NODE_NAME $PLEX_CLAIM
+    sudo ./install.sh \$ZT_NETWORK_ID \$NODE_NAME \$PLEX_CLAIM
     "
     exit 2
 fi
