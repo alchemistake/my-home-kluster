@@ -3,7 +3,14 @@ set -e
 
 if [ `whoami` != root ]; then
     echo Please run this script as root or using sudo
-    exit
+    exit 2
+fi
+
+if [ "$#" -ne 3 ]; then
+    echo "Usage:
+    sudo ./install.sh \$ZT_NETWORK_ID \$NODE_NAME \$PLEX_CLAIM
+    "
+    exit 2
 fi
 
 CYAN='\033[0;36m'
@@ -11,6 +18,7 @@ NC='\033[0m'
 
 NETWORK_ID=$1
 NODE_NAME=$2
+CLAIM=$3
 
 # Install Dependencies
 apt update -y
@@ -91,3 +99,4 @@ chown $SUDO_USER /home/$SUDO_USER/.kube/config
 
 # Initial Install of Kustomize
 kustomize build apps | kubectl apply -f -
+kubectl create secret generic claim -n plex --from-literal=claim=$CLAIM
