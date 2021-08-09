@@ -1,7 +1,0 @@
-resources:
-- namespace.yaml
-- serviceAccount.yaml
-- role.yaml
-- roleBinding.yaml
-- service.yaml
-- deployment.yaml
