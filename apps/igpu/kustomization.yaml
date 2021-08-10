@@ -1,0 +1,2 @@
+resources:
+  - github.com/intel/intel-device-plugins-for-kubernetes/deployments//gpu_plugin?ref=v0.21.0
