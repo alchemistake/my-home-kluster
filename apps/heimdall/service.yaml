@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: heimdall
+  namespace: heimdall
+  labels:
+    app: heimdall
+  annotations:
+    metallb.universe.tf/address-pool: poke-verse
+spec:
+  selector:
+    app: heimdall
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
