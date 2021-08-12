@@ -23,7 +23,7 @@ spec:
       enableServiceLinks: true
       containers:
         - name: heimdall
-          image: "linuxserver/heimdall:version-2.2.2"
+          image: "linuxserver/heimdall:latest"
           imagePullPolicy: IfNotPresent
           env:
             - name: "PGID"
