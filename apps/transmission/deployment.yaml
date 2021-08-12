@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: transmission
+  name: transmission
+  labels:
+    app: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      volumes:
+        - name: download
+          hostPath:
+            path: /k3s/plex/data
+        - name: config
+          hostPath:
+            path: /k3s/transmission/config
+        - name: dev-tun
+          hostPath:
+            path: /dev/net/tun
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+          - 8.8.4.4
+      securityContext: {}
+      containers:
+        - name: transmission
+          image: "haugene/transmission-openvpn:3.7"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OPENVPN_PROVIDER
+              value: SURFSHARK
+            - name: OPENVPN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: ovpn
+            - name: OPENVPN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: ovpn
+            - name: OPENVPN_CONFIG
+              value: tr-ist_tcp
+            - name: LOCAL_NETWORK
+              value: 10.147.0.0/24
+            - name: TRANSMISSION_PEER_PORT
+              value: "47444"
+            - name: TRANSMISSION_DOWNLOAD_DIR
+              value: /downloads
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TRANSMISSION_WEB_UI
+              value: combustion
+          ports:
+            - name: http
+              containerPort: 9091
+              protocol: TCP
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+            - mountPath: /data
+              name: config
+            - mountPath: /downloads
+              name: download
+            - mountPath: /dev/net/tun
+              name: dev-tun
+          resources: {}

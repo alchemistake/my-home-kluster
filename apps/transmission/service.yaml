@@ -1,4 +1,4 @@
-git reapiVersion: v1
+apiVersion: v1
 kind: Service
 metadata:
   namespace: transmission

@@ -3,3 +3,4 @@ resources:
   - metallb
   - plex
   - heimdall
+  - transmission
