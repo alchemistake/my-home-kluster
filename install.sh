@@ -8,7 +8,7 @@ fi
 
 if [ "$#" -ne 3 ]; then
     echo "Usage:
-    sudo ./install.sh \$ZT_NETWORK_ID \$NODE_NAME \$PLEX_CLAIM
+    sudo ./install.sh \$ZT_NETWORK_ID \$NODE_NAME \$PLEX_CLAIM \$OVPN_USERNAME \$OVPN_PASS
     "
     exit 2
 fi
@@ -19,6 +19,8 @@ NC='\033[0m'
 NETWORK_ID=$1
 NODE_NAME=$2
 CLAIM=$3
+USERNAME=$4
+PASSWORD=$5
 
 # Install Dependencies
 apt update -y
@@ -100,3 +102,4 @@ chown $SUDO_USER /home/$SUDO_USER/.kube/config
 # Initial Install of Kustomize
 kustomize build apps | kubectl apply -f -
 kubectl create secret generic claim -n plex --from-literal=claim=$CLAIM
+kubectl create secret generic ovpn -n transmission --from-literal=username=$USERNAME --from-literal=password=$PASSWORD
