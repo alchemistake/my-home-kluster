@@ -1,3 +1,5 @@
+namespace: transmission
+
 resources:
   - namespace.yaml
   - deployment.yaml
