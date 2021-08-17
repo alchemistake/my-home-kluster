@@ -1,0 +1,5 @@
+namespace: media-collection
+
+resources:
+  - namespace.yaml
+  - transmission
