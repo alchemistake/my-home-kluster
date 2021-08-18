@@ -102,4 +102,4 @@ chown $SUDO_USER /home/$SUDO_USER/.kube/config
 # Initial Install of Kustomize
 kustomize build apps | kubectl apply -f -
 kubectl create secret generic claim -n plex --from-literal=claim=$CLAIM
-kubectl create secret generic ovpn -n transmission --from-literal=username=$USERNAME --from-literal=password=$PASSWORD
+kubectl create secret generic ovpn -n media-collection --from-literal=username=$USERNAME --from-literal=password=$PASSWORD

@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: transmission
   name: transmission
   labels:
     app: transmission
@@ -49,7 +48,7 @@ spec:
                   key: password
                   name: ovpn
             - name: OPENVPN_CONFIG
-              value: tr-ist_tcp
+              value: tr-ist_udp
             - name: LOCAL_NETWORK
               value: 10.147.0.0/24
             - name: TRANSMISSION_PEER_PORT
@@ -61,7 +60,7 @@ spec:
             - name: PGID
               value: "1000"
             - name: TRANSMISSION_WEB_UI
-              value: combustion
+              value: flood-for-transmission
           ports:
             - name: http
               containerPort: 9091
