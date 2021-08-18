@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  labels:
+    app: radarr
+    release: radarr
+  annotations:
+    metallb.universe.tf/address-pool: poke-verse
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 7878
+      protocol: TCP
+      name: http
+  selector:
+    app: radarr
+    release: radarr

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  labels:
+    app: sonarr
+    release: sonarr
+  annotations:
+    metallb.universe.tf/address-pool: poke-verse
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8989
+      protocol: TCP
+      name: http
+  selector:
+    app: sonarr
+    release: sonarr

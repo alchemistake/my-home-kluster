@@ -3,3 +3,6 @@ namespace: media-collection
 resources:
   - namespace.yaml
   - transmission
+  - jackett
+  - radarr
+  - sonarr
