@@ -21,6 +21,9 @@ spec:
       - name: radarr
         hostPath:
           path: /k3s/radarr
+      - name: downloads
+        hostPath:
+          path: /k3s/plex/data
       containers:
         - name: radarr
           image: "linuxserver/radarr:latest"
@@ -44,6 +47,8 @@ spec:
             - mountPath: /movies
               name: radarr
               subPath: medias/movies
+            - mountPath: /downloads
+              name: downloads  
           resources:
             limits:
               cpu: 0.5
