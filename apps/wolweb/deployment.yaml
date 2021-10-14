@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: wol
+  name: wol
+  namespace: wol
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: wol
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: wol
+    spec:
+      volumes:
+        - name: data
+          hostPath:
+            path: /k3s/wol/data
+      hostNetwork: true
+      containers:
+        - image: alchemistake/wolweb
+          imagePullPolicy: Always
+          name: wol
+          resources: {}
+          stdin: true
+          tty: true
+          ports:
+            - containerPort: 8089
+              name: web
+            - containerPort: 9
+              name: wol
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /wolweb/data
+              name: data
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      restartPolicy: Always
