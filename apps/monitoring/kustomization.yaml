@@ -1,6 +1,0 @@
-namespace: monitoring
-
-resources:
-  - namespace.yaml
-  - grafana
-  - prometheus

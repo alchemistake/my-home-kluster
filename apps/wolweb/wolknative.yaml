@@ -1,0 +1,20 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: wol2
+  annotations:
+    metallb.universe.tf/address-pool: poke-verse
+spec:
+  template:
+    metadata:
+      # This is the name of our new "Revision," it must follow the convention {service-name}-{revision-name}
+      name: wol2-test
+    spec:
+      containers:
+        - image: alchemistake/wolweb
+          imagePullPolicy: Always
+          name: wol
+          resources: {}
+          ports:
+            - containerPort: 8089
+              name: http1              

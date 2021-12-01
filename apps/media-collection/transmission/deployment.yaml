@@ -54,7 +54,7 @@ spec:
             - name: TRANSMISSION_PEER_PORT
               value: "47444"
             - name: TRANSMISSION_DOWNLOAD_DIR
-              value: /downloads
+              value: /downloads/transmission
             - name: PUID
               value: "1000"
             - name: PGID
@@ -77,3 +77,10 @@ spec:
             - mountPath: /dev/net/tun
               name: dev-tun
           resources: {}
+          livenessProbe:
+            exec:
+              command:
+              - curl
+              - www.google.com
+            initialDelaySeconds: 5
+            periodSeconds: 5

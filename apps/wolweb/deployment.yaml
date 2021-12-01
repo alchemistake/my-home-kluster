@@ -42,6 +42,4 @@ spec:
           volumeMounts:
             - mountPath: /wolweb/data
               name: data
-      nodeSelector:
-        beta.kubernetes.io/arch: amd64
       restartPolicy: Always
