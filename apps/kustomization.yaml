@@ -1,7 +1,6 @@
 resources:
   - igpu
   - metallb
-  - monitoring
   - plex
   - heimdall
   - media-collection
