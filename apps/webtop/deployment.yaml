@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webtop
+  name: webtop
+  namespace: webtop
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: webtop
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: webtop
+    spec:
+      volumes:
+        - name: data
+          hostPath:
+            path: /k3s/webtop/data
+      hostNetwork: true
+      containers:
+        - image: lscr.io/linuxserver/webtop
+          imagePullPolicy: Always
+          name: webtop
+          ports:
+            - containerPort: 3000
+              name: web
+          volumeMounts:
+            - mountPath: /config
+              name: data
+          env:
+            - name: PUID
+              value: "1000"
+            - name: GUID
+              value: "1000"
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "1"
+            limits:
+              memory: "500Mi"
+              cpu: "1"
+      restartPolicy: Always

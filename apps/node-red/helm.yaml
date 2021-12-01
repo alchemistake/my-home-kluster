@@ -1,0 +1,96 @@
+---
+# Source: node-red/templates/common.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: node-red
+  name: node-red
+  labels:
+    helm.sh/chart: node-red-9.0.0
+    app.kubernetes.io/name: node-red
+    app.kubernetes.io/instance: node-red
+    app.kubernetes.io/version: "1.3.5"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    metallb.universe.tf/address-pool: poke-verse
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: node-red
+    app.kubernetes.io/instance: node-red
+---
+# Source: node-red/templates/common.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: node-red
+  name: node-red
+  labels:
+    helm.sh/chart: node-red-9.0.0
+    app.kubernetes.io/name: node-red
+    app.kubernetes.io/instance: node-red
+    app.kubernetes.io/version: "1.3.5"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  revisionHistoryLimit: 3
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: node-red
+      app.kubernetes.io/instance: node-red
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: node-red
+        app.kubernetes.io/instance: node-red
+    spec:
+      serviceAccountName: default
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      containers:
+        - name: node-red
+          image: "nodered/node-red:1.3.5"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "FLOWS"
+              value: "flows.json"
+            - name: "NODE_OPTIONS"
+              value: ""
+            - name: "NODE_RED_ENABLE_PROJECTS"
+              value: ""
+            - name: "NODE_RED_ENABLE_SAFE_MODE"
+              value: ""
+            - name: "TZ"
+              value: "UTC"
+          ports:
+            - name: http
+              containerPort: 1880
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 1880
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 1880
+            initialDelaySeconds: 0
+            failureThreshold: 3
+            timeoutSeconds: 1
+            periodSeconds: 10
+          startupProbe:
+            tcpSocket:
+              port: 1880
+            initialDelaySeconds: 0
+            failureThreshold: 30
+            timeoutSeconds: 1
+            periodSeconds: 5
