@@ -4,3 +4,4 @@ resources:
   - plex
   - heimdall
   - media-collection
+  - node-red
