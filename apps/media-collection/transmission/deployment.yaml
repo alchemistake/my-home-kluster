@@ -80,7 +80,11 @@ spec:
           livenessProbe:
             exec:
               command:
-              - curl
-              - www.google.com
+                - curl
+                - -s
+                - www.google.com
+                - ">"
+                - /dev/null
             initialDelaySeconds: 5
-            periodSeconds: 5
+            periodSeconds: 600
+            timeoutSeconds: 60
