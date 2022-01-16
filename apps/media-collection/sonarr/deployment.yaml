@@ -26,6 +26,17 @@ spec:
           path: /k3s/plex/data
       containers:
         - name: sonarr
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -s
+                - "localhost:8989"
+                - ">"
+                - /dev/null
+            initialDelaySeconds: 5
+            periodSeconds: 600
+            timeoutSeconds: 60
           image: "linuxserver/sonarr:latest"
           imagePullPolicy: IfNotPresent
           env:
