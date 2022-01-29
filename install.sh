@@ -25,7 +25,7 @@ PASSWORD=$5
 # Install Dependencies
 apt update -y
 apt upgrade -y
-apt install -y network-manager curl git ntfs-3g hfsprogs mbpfan linux-headers-generic build-essential dkms bcmwl-kernel-source openssh-server
+apt install -y network-manager curl git ntfs-3g hfsprogs mbpfan linux-headers-generic build-essential dkms bcmwl-kernel-source openssh-server samba
 
 # ZeroTier Install
 curl -s https://install.zerotier.com | sudo bash
@@ -40,11 +40,11 @@ mv kustomize /usr/local/bin/
 # mbpfan Config
 echo "[general]
 
-min_fan_speed = $(cat '/sys/devices/platform/applesmc.768/fan1_min')
-max_fan_speed = $(cat '/sys/devices/platform/applesmc.768/fan1_max')
-low_temp = 63
-high_temp = 66
-max_temp = 85
+min_fan1_speed = 3000
+max_fan1_speed = $(cat '/sys/devices/platform/applesmc.768/fan1_max')
+low_temp = 40
+high_temp = 40
+max_temp = 60
 polling_interval = 1
 " > /etc/mbpfan.conf
 service mbpfan restart
@@ -98,6 +98,10 @@ chown $SUDO_USER /etc/rancher/k3s/k3s.yaml
 chown $SUDO_USER /home/$SUDO_USER/.kube
 cp /etc/rancher/k3s/k3s.yaml /home/$SUDO_USER/.kube/config
 chown $SUDO_USER /home/$SUDO_USER/.kube/config
+
+# Samba
+ufw allow samba
+smbpasswd -a $USER
 
 # Initial Install of Kustomize
 kustomize build apps | kubectl apply -f -
