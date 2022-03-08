@@ -20,13 +20,13 @@ spec:
         release: jackett
     spec:
       volumes:
-      - name: jackett
-        hostPath:
-          path: /k3s/jackett
+        - name: jackett
+          hostPath:
+            path: /k3s/jackett
       containers:
         - name: jackett
           image: "linuxserver/jackett:latest"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"
@@ -50,5 +50,4 @@ spec:
             requests:
               cpu: 0.1
               memory: 128Mi
-          securityContext:
-            {}
+          securityContext: {}

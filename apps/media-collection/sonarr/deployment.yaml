@@ -18,12 +18,12 @@ spec:
         release: sonarr
     spec:
       volumes:
-      - name: sonarr
-        hostPath:
-          path: /k3s/sonarr
-      - name: downloads
-        hostPath:
-          path: /k3s/plex/data
+        - name: sonarr
+          hostPath:
+            path: /k3s/sonarr
+        - name: downloads
+          hostPath:
+            path: /k3s/plex/data
       containers:
         - name: sonarr
           livenessProbe:
@@ -38,7 +38,7 @@ spec:
             periodSeconds: 600
             timeoutSeconds: 60
           image: "linuxserver/sonarr:latest"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"
@@ -56,7 +56,7 @@ spec:
               name: sonarr
               subPath: medias/tv
             - mountPath: /downloads
-              name: downloads  
+              name: downloads
           resources:
             limits:
               cpu: 0.5

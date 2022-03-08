@@ -33,7 +33,7 @@ spec:
       containers:
         - name: transmission
           image: "haugene/transmission-openvpn:3.7"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: OPENVPN_PROVIDER
               value: SURFSHARK
