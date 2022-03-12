@@ -65,6 +65,9 @@ spec:
             - name: http
               containerPort: 9091
               protocol: TCP
+            - name: connectivity
+              containerPort: 55555
+              protocol: TCP
           securityContext:
             capabilities:
               add:
