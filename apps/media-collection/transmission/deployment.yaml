@@ -61,8 +61,6 @@ spec:
               value: "1000"
             - name: TRANSMISSION_WEB_UI
               value: flood-for-transmission
-            - name: CREATE_TUN_DEVICE
-              value: "true"
             - name: MAM_SESSION
               valueFrom:
                 secretKeyRef:
@@ -81,8 +79,8 @@ spec:
               name: config
             - mountPath: /downloads
               name: download
-            # - mountPath: /dev/net/tun
-            #   name: dev-tun
+            - mountPath: /dev/net/tun
+              name: dev-tun
           resources: {}
           livenessProbe:
             exec:
@@ -103,5 +101,5 @@ spec:
                 - -c
                 - ~/mam.cookies
                 - -b
-                - 'mam_id=${MAM_SESSION}'
+                - mam_id=$MAM_SESSION
                 - https://t.myanonamouse.net/json/dynamicSeedbox.php
