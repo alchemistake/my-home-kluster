@@ -61,12 +61,16 @@ spec:
               value: "1000"
             - name: TRANSMISSION_WEB_UI
               value: flood-for-transmission
+            - name: CREATE_TUN_DEVICE
+              value: "true"
+            - name: MAM_SESSION
+              valueFrom:
+                secretKeyRef:
+                  key: session
+                  name: mam
           ports:
             - name: http
               containerPort: 9091
-              protocol: TCP
-            - name: connectivity
-              containerPort: 55555
               protocol: TCP
           securityContext:
             capabilities:
@@ -77,8 +81,8 @@ spec:
               name: config
             - mountPath: /downloads
               name: download
-            - mountPath: /dev/net/tun
-              name: dev-tun
+            # - mountPath: /dev/net/tun
+            #   name: dev-tun
           resources: {}
           livenessProbe:
             exec:
@@ -91,3 +95,13 @@ spec:
             initialDelaySeconds: 5
             periodSeconds: 600
             timeoutSeconds: 60
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                - curl
+                - -c
+                - ~/mam.cookies
+                - -b
+                - 'mam_id=${MAM_SESSION}'
+                - https://t.myanonamouse.net/json/dynamicSeedbox.php
