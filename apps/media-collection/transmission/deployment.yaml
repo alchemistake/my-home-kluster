@@ -36,7 +36,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: OPENVPN_PROVIDER
-              value: SURFSHARK
+              value: PIA
             - name: OPENVPN_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -48,11 +48,11 @@ spec:
                   key: password
                   name: ovpn
             - name: OPENVPN_CONFIG
-              value: tr-ist_udp
+              value: ukraine
             - name: LOCAL_NETWORK
               value: 10.147.0.0/24
             - name: TRANSMISSION_PEER_PORT
-              value: "47444"
+              value: "55555"
             - name: TRANSMISSION_DOWNLOAD_DIR
               value: /downloads/transmission
             - name: PUID
@@ -97,9 +97,9 @@ spec:
             postStart:
               exec:
                 command:
-                - curl
-                - -c
-                - ~/mam.cookies
-                - -b
-                - mam_id=$MAM_SESSION
-                - https://t.myanonamouse.net/json/dynamicSeedbox.php
+                  - curl
+                  - -c
+                  - ~/mam.cookies
+                  - -b
+                  - mam_id=$MAM_SESSION
+                  - https://t.myanonamouse.net/json/dynamicSeedbox.php
