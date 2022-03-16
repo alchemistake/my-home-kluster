@@ -97,9 +97,6 @@ spec:
             postStart:
               exec:
                 command:
-                  - curl
+                  - bash
                   - -c
-                  - ~/mam.cookies
-                  - -b
-                  - mam_id=$MAM_SESSION
-                  - https://t.myanonamouse.net/json/dynamicSeedbox.php
+                  - curl -c ~/mam.cookies -b mam_id=$MAM_SESSION https://t.myanonamouse.net/json/dynamicSeedbox.php
